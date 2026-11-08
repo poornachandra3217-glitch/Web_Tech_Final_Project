@@ -1,0 +1,31 @@
+name: Authorized live assessment
+on:
+  push:
+    branches: [qa/live-assessment-20261108]
+    paths: [scripts/live-check.js, .github/workflows/live-assessment.yml]
+permissions:
+  contents: read
+jobs:
+  live-api:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Test deployed assessment portal with approved synthetic records
+        run: node scripts/live-check.js | tee docs/live-testing-console.txt
+        shell: bash
+        env:
+          CONFIRM_LIVE_TEST: 'yes'
+      - name: Save sanitized testing evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: campusfind-live-testing-evidence
+          path: |
+            docs/live-testing/
+            docs/live-testing-console.txt
