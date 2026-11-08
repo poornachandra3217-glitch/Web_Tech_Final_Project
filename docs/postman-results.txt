@@ -1,0 +1,137 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> campusfind@1.0.0 test:acceptance
+> node scripts/postman-check.js
+
+(node:397) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+CampusFind API acceptance tests
+
+→ 01 Start session and get CSRF token
+  GET http://127.0.0.1:36237/api/auth/me [200 OK, 1.24kB, 36ms]
+  ✓  HTTP 200
+
+→ 02 Protected report rejects anonymous access
+  POST http://127.0.0.1:36237/api/items [401 Unauthorized, 1.03kB, 16ms]
+  ✓  HTTP 401
+
+→ 03 Invalid registration
+  POST http://127.0.0.1:36237/api/auth/register [400 Bad Request, 1.17kB, 11ms]
+  ✓  HTTP 400
+
+→ 04 Register reporter
+  POST http://127.0.0.1:36237/api/auth/register [201 Created, 1.48kB, 457ms]
+  ✓  HTTP 201
+
+→ 05 Invalid listing validation
+  POST http://127.0.0.1:36237/api/items [400 Bad Request, 1.05kB, 16ms]
+  ✓  HTTP 400
+
+→ 06 Create found listing
+  POST http://127.0.0.1:36237/api/items [201 Created, 1.05kB, 12ms]
+  ✓  HTTP 201
+
+→ 07 Retrieve item
+  GET http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5 [200 OK, 1.41kB, 15ms]
+  ✓  HTTP 200
+  ✓  Owner email stays private
+
+→ 08 Search and filter
+  GET http://127.0.0.1:36237/api/items?q=Postman&category=Bags&type=found&location=Library [200 OK, 1.42kB, 17ms]
+  ✓  HTTP 200
+  ✓  Created item found
+
+→ 09 Update item
+  PATCH http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5 [200 OK, 1.01kB, 48ms]
+  ✓  HTTP 200
+
+→ 10 Self claim rejected
+  POST http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5/claims [400 Bad Request, 1.05kB, 8ms]
+  ✓  HTTP 400
+
+→ 11 Logout reporter
+  POST http://127.0.0.1:36237/api/auth/logout [200 OK, 1.08kB, 5ms]
+  ✓  HTTP 200
+
+→ 12 New anonymous session
+  GET http://127.0.0.1:36237/api/auth/me [200 OK, 1.24kB, 4ms]
+  ✓  HTTP 200
+
+→ 13 Register claimant
+  POST http://127.0.0.1:36237/api/auth/register [201 Created, 1.48kB, 448ms]
+  ✓  HTTP 201
+
+→ 14 Another user cannot update listing
+  PATCH http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5 [403 Forbidden, 1.06kB, 9ms]
+  ✓  HTTP 403
+
+→ 15 Submit claim
+  POST http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5/claims [201 Created, 1.09kB, 10ms]
+  ✓  HTTP 201
+
+→ 16 Duplicate claim rejected
+  POST http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5/claims [409 Conflict, 1.07kB, 9ms]
+  ✓  HTTP 409
+
+→ 17 Claimant cannot approve claim
+  PATCH http://127.0.0.1:36237/api/claims/6af07fc6c91e287b5692bae7 [403 Forbidden, 1.06kB, 7ms]
+  ✓  HTTP 403
+
+→ 18 Student cannot access admin statistics
+  GET http://127.0.0.1:36237/api/admin/stats [403 Forbidden, 1.03kB, 5ms]
+  ✓  HTTP 403
+
+→ 19 Logout claimant
+  POST http://127.0.0.1:36237/api/auth/logout [200 OK, 1.08kB, 4ms]
+  ✓  HTTP 200
+
+→ 20 New session for reporter
+  GET http://127.0.0.1:36237/api/auth/me [200 OK, 1.24kB, 2ms]
+  ✓  HTTP 200
+
+→ 21 Login reporter
+  POST http://127.0.0.1:36237/api/auth/login [200 OK, 1.47kB, 407ms]
+  ✓  HTTP 200
+
+→ 22 Approve request as reporter
+  PATCH http://127.0.0.1:36237/api/claims/6af07fc6c91e287b5692bae7 [200 OK, 1.01kB, 18ms]
+  ✓  HTTP 200
+
+→ 23 Verify recovered status
+  GET http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5 [200 OK, 1.42kB, 6ms]
+  ✓  HTTP 200
+  ✓  Item recovered
+
+→ 24 Preserve claim history on delete
+  DELETE http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5 [409 Conflict, 1.09kB, 6ms]
+  ✓  HTTP 409
+
+→ 25 Mutation without CSRF is rejected
+  PATCH http://127.0.0.1:36237/api/items/6af07fc5c91e287b5692bae5 [403 Forbidden, 1.05kB, 3ms]
+  ✓  HTTP 403
+
+→ 26 Final logout
+  POST http://127.0.0.1:36237/api/auth/logout [200 OK, 1.08kB, 5ms]
+  ✓  HTTP 200
+
+┌─────────────────────────┬───────────────────┬───────────────────┐
+│                         │          executed │            failed │
+├─────────────────────────┼───────────────────┼───────────────────┤
+│              iterations │                 1 │                 0 │
+├─────────────────────────┼───────────────────┼───────────────────┤
+│                requests │                26 │                 0 │
+├─────────────────────────┼───────────────────┼───────────────────┤
+│            test-scripts │                26 │                 0 │
+├─────────────────────────┼───────────────────┼───────────────────┤
+│      prerequest-scripts │                 0 │                 0 │
+├─────────────────────────┼───────────────────┼───────────────────┤
+│              assertions │                29 │                 0 │
+├─────────────────────────┴───────────────────┴───────────────────┤
+│ total run duration: 2s                                          │
+├─────────────────────────────────────────────────────────────────┤
+│ total data received: 3.05kB (approx)                            │
+├─────────────────────────────────────────────────────────────────┤
+│ average response time: 60ms [min: 2ms, max: 457ms, s.d.: 136ms] │
+└─────────────────────────────────────────────────────────────────┘

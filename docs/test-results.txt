@@ -1,0 +1,46 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> campusfind@1.0.0 test
+> node --test --test-concurrency=1
+
+✔ 01 public metadata and session token are available (2431.792002ms)
+✔ 02 rejects registration with invalid email and short password (11.330409ms)
+✔ 03 requires CSRF token for writes (3.353034ms)
+✔ 04 denies unauthenticated report creation (7.90091ms)
+✔ 05 creates a persistent item (18.902386ms)
+✔ 06 rejects invalid report fields (7.67414ms)
+✔ 07 retrieves keyword/category/location/type-filtered items (14.233384ms)
+✔ 08 detail does not leak reporter email or password hash (24.01948ms)
+✔ 09 blocks another user from editing or deleting (17.005827ms)
+✔ 10 reporter can update listing (31.139201ms)
+✔ 11 rejects disguised image upload (23.814069ms)
+✔ 12 creates claim and prevents duplicate claim (26.764986ms)
+✔ 13 reporter cannot claim own item (6.252796ms)
+✔ 14 strangers cannot see private evidence (9.92803ms)
+✔ 15 claimant cannot approve own claim (30.337447ms)
+✔ 16 preserve history: item with claims cannot be deleted or rewritten (18.780645ms)
+✔ 17 second claimant can request item (14.042729ms)
+✔ 18 atomic approval recovers item and rejects competing pending claims (31.93851ms)
+✔ 19 prevents repeat review and reopening recovered item (25.209596ms)
+✔ 20 student cannot access admin statistics; admin can (16.348365ms)
+✔ 21 malformed IDs and filter operators return controlled errors (16.061536ms)
+✔ 22 rejects wrong password and logs out fully (791.265309ms)
+✔ 23 possible matches include opposite type in same category (23.626858ms)
+✔ 24 seed is repeatable, preserves data and provides 12 samples (880.438407ms)
+✔ 25 static frontend and security headers are served (6.212709ms)
+✔ 26 accepts real image bytes and retrieves the persisted photo (31.029927ms)
+✔ 27 concurrent claim approvals produce exactly one winner (55.929331ms)
+✔ 28 rejects short claim evidence (19.869965ms)
+✔ 29 home module renders real database listings and statistics (1691.719662ms)
+✔ 30 search form navigates to a filtered result (43.742098ms)
+✔ 31 sign-in form loads the student dashboard (466.347169ms)
+✔ 32 report form publishes a persistent listing and opens detail (81.967243ms)
+✔ 33 sign-out clears protected navigation and account session (43.015394ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13377.766698

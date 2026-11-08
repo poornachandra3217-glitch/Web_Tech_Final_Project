@@ -1,0 +1,370 @@
+{
+  "description": "Sanitized Newman evidence. Request/response bodies, headers, cookies, environment values and runtime tokens intentionally omitted.",
+  "collection": "CampusFind API acceptance tests",
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 26,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 26,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 26,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 26,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 26,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 29,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 26,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 60.92307692307692,
+      "responseMin": 2,
+      "responseMax": 457,
+      "responseSd": 136.50610667572093,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1794146244582,
+      "completed": 1794146246657
+    },
+    "failures": [],
+    "executions": [
+      {
+        "name": "01 Start session and get CSRF token",
+        "method": "GET",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "02 Protected report rejects anonymous access",
+        "method": "POST",
+        "response_code": 401,
+        "assertions": [
+          {
+            "assertion": "HTTP 401",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "03 Invalid registration",
+        "method": "POST",
+        "response_code": 400,
+        "assertions": [
+          {
+            "assertion": "HTTP 400",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "04 Register reporter",
+        "method": "POST",
+        "response_code": 201,
+        "assertions": [
+          {
+            "assertion": "HTTP 201",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "05 Invalid listing validation",
+        "method": "POST",
+        "response_code": 400,
+        "assertions": [
+          {
+            "assertion": "HTTP 400",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "06 Create found listing",
+        "method": "POST",
+        "response_code": 201,
+        "assertions": [
+          {
+            "assertion": "HTTP 201",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "07 Retrieve item",
+        "method": "GET",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          },
+          {
+            "assertion": "Owner email stays private",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "08 Search and filter",
+        "method": "GET",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          },
+          {
+            "assertion": "Created item found",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "09 Update item",
+        "method": "PATCH",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "10 Self claim rejected",
+        "method": "POST",
+        "response_code": 400,
+        "assertions": [
+          {
+            "assertion": "HTTP 400",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "11 Logout reporter",
+        "method": "POST",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "12 New anonymous session",
+        "method": "GET",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "13 Register claimant",
+        "method": "POST",
+        "response_code": 201,
+        "assertions": [
+          {
+            "assertion": "HTTP 201",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "14 Another user cannot update listing",
+        "method": "PATCH",
+        "response_code": 403,
+        "assertions": [
+          {
+            "assertion": "HTTP 403",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "15 Submit claim",
+        "method": "POST",
+        "response_code": 201,
+        "assertions": [
+          {
+            "assertion": "HTTP 201",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "16 Duplicate claim rejected",
+        "method": "POST",
+        "response_code": 409,
+        "assertions": [
+          {
+            "assertion": "HTTP 409",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "17 Claimant cannot approve claim",
+        "method": "PATCH",
+        "response_code": 403,
+        "assertions": [
+          {
+            "assertion": "HTTP 403",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "18 Student cannot access admin statistics",
+        "method": "GET",
+        "response_code": 403,
+        "assertions": [
+          {
+            "assertion": "HTTP 403",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "19 Logout claimant",
+        "method": "POST",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "20 New session for reporter",
+        "method": "GET",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "21 Login reporter",
+        "method": "POST",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "22 Approve request as reporter",
+        "method": "PATCH",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "23 Verify recovered status",
+        "method": "GET",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          },
+          {
+            "assertion": "Item recovered",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "24 Preserve claim history on delete",
+        "method": "DELETE",
+        "response_code": 409,
+        "assertions": [
+          {
+            "assertion": "HTTP 409",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "25 Mutation without CSRF is rejected",
+        "method": "PATCH",
+        "response_code": 403,
+        "assertions": [
+          {
+            "assertion": "HTTP 403",
+            "passed": true
+          }
+        ]
+      },
+      {
+        "name": "26 Final logout",
+        "method": "POST",
+        "response_code": 200,
+        "assertions": [
+          {
+            "assertion": "HTTP 200",
+            "passed": true
+          }
+        ]
+      }
+    ]
+  }
+}

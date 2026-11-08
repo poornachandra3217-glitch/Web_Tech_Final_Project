@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#133d34" />
+    <meta
+      name="description"
+      content="CampusFind — the Sai University campus lost and found portal. Report, discover and reconnect with your belongings."
+    />
+    <title>CampusFind · Sai University</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="topbar">
+      <a href="#/" class="brand"
+        ><span class="brand-icon">c<span>f</span></span
+        ><span
+          >campus<span class="brand-light">find</span
+          ><small>SAI UNIVERSITY</small></span
+        ></a
+      >
+      <nav aria-label="Main navigation" id="navigation"></nav>
+      <div id="account"></div>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="loading">Opening CampusFind…</div>
+    </main>
+    <footer>
+      <a class="footer-brand" href="#/"
+        >campusfind<span> · SAI UNIVERSITY</span></a
+      >
+      <p>A little less lost. A lot more connected.</p>
+      <a href="#/guide">How it works ↗</a>
+    </footer>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="modal" aria-labelledby="modal-title">
+      <button class="close-dialog" aria-label="Close dialog">×</button>
+      <div id="modal-content"></div>
+    </dialog>
+  </body>
+</html>

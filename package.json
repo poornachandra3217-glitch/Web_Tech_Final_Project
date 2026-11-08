@@ -1,0 +1,46 @@
+{
+  "name": "campusfind",
+  "version": "1.0.0",
+  "description": "Sai University Campus Lost and Found Portal",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/seed.js",
+    "test": "node --test --test-concurrency=1",
+    "check": "node --check src/app.js && node --check src/models.js && node --check src/server.js && node --check src/seed.js && node --check public/app.js && node --check public/api.js && node --check public/icons.js",
+    "qa:preview": "node scripts/qa-preview.js",
+    "test:postman": "newman run postman/CampusFind.postman_collection.json -e postman/Local.postman_environment.json",
+    "test:acceptance": "node scripts/postman-check.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.3",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "mongoose": "^9.12.0",
+    "multer": "^2.5.0"
+  },
+  "devDependencies": {
+    "jsdom": "^31.0.0",
+    "mongodb-memory-server": "^11.3.0",
+    "newman": "^6.2.3",
+    "prettier": "^3.9.10",
+    "supertest": "^7.3.2"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
+}
