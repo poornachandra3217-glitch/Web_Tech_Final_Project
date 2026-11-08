@@ -1,0 +1,167 @@
+PASS Live database health
+PASS Live frontend HTML served
+PASS Production security headers
+PASS Anonymous report denied
+PASS Invalid registration denied
+PASS reporter: registration creates student
+PASS claimant: registration creates student
+PASS stranger: registration creates student
+PASS Student denied administrator statistics
+PASS Missing CSRF token denied
+PASS Future report date denied
+PASS Multipart report and image created
+PASS Persisted image retrieved with exact bytes
+PASS Reporter updates own report
+PASS Another student cannot edit report
+PASS Keyword/category/building/type filters retrieve report
+PASS Student dashboard personal-listings data
+PASS Public detail excludes reporter credentials
+PASS Reporter cannot claim own item
+PASS Short claim evidence denied
+PASS Claim submitted
+PASS Duplicate claim denied
+PASS Uninvolved student cannot see private claim
+PASS Claimant cannot approve own claim
+PASS Reporter dashboard incoming request
+PASS Second synthetic claim submitted
+PASS Reporter rejects claim
+PASS Claimant dashboard displays rejection
+PASS Reporter approves transaction
+PASS Recovered item status persisted
+PASS Claimant dashboard displays approval
+PASS Recovered item cannot reopen
+PASS Reporter logout
+PASS Logout removes protected access
+PASS Existing registered user can log in again
+newman
+
+CampusFind API acceptance tests
+
+→ 01 Start session and get CSRF token
+  GET https://campusfind-sai.onrender.com/api/auth/me [200 OK, 1.45kB, 310ms]
+  ✓  HTTP 200
+
+→ 02 Protected report rejects anonymous access
+  POST https://campusfind-sai.onrender.com/api/items [401 Unauthorized, 1.24kB, 334ms]
+  ✓  HTTP 401
+
+→ 03 Invalid registration
+  POST https://campusfind-sai.onrender.com/api/auth/register [400 Bad Request, 1.37kB, 869ms]
+  ✓  HTTP 400
+
+→ 04 Register reporter
+  POST https://campusfind-sai.onrender.com/api/auth/register [201 Created, 1.69kB, 2.6s]
+  ✓  HTTP 201
+
+→ 05 Invalid listing validation
+  POST https://campusfind-sai.onrender.com/api/items [400 Bad Request, 1.26kB, 400ms]
+  ✓  HTTP 400
+
+→ 06 Create found listing
+  POST https://campusfind-sai.onrender.com/api/items [201 Created, 1.26kB, 452ms]
+  ✓  HTTP 201
+
+→ 07 Retrieve item
+  GET https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c [200 OK, 1.62kB, 928ms]
+  ✓  HTTP 200
+  ✓  Owner email stays private
+
+→ 08 Search and filter
+  GET https://campusfind-sai.onrender.com/api/items?q=Postman&category=Bags&type=found&location=Library [200 OK, 1.63kB, 446ms]
+  ✓  HTTP 200
+  ✓  Created item found
+
+→ 09 Update item
+  PATCH https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c [200 OK, 1.22kB, 786ms]
+  ✓  HTTP 200
+
+→ 10 Self claim rejected
+  POST https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c/claims [400 Bad Request, 1.26kB, 464ms]
+  ✓  HTTP 400
+
+→ 11 Logout reporter
+  POST https://campusfind-sai.onrender.com/api/auth/logout [200 OK, 1.29kB, 639ms]
+  ✓  HTTP 200
+
+→ 12 New anonymous session
+  GET https://campusfind-sai.onrender.com/api/auth/me [200 OK, 1.46kB, 618ms]
+  ✓  HTTP 200
+
+→ 13 Register claimant
+  POST https://campusfind-sai.onrender.com/api/auth/register [201 Created, 1.69kB, 2.4s]
+  ✓  HTTP 201
+
+→ 14 Another user cannot update listing
+  PATCH https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c [403 Forbidden, 1.27kB, 451ms]
+  ✓  HTTP 403
+
+→ 15 Submit claim
+  POST https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c/claims [201 Created, 1.29kB, 514ms]
+  ✓  HTTP 201
+
+→ 16 Duplicate claim rejected
+  POST https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c/claims [409 Conflict, 1.27kB, 901ms]
+  ✓  HTTP 409
+
+→ 17 Claimant cannot approve claim
+  PATCH https://campusfind-sai.onrender.com/api/claims/6af09d0977f95512ea18b23f [403 Forbidden, 1.27kB, 911ms]
+  ✓  HTTP 403
+
+→ 18 Student cannot access admin statistics
+  GET https://campusfind-sai.onrender.com/api/admin/stats [403 Forbidden, 1.24kB, 594ms]
+  ✓  HTTP 403
+
+→ 19 Logout claimant
+  POST https://campusfind-sai.onrender.com/api/auth/logout [200 OK, 1.29kB, 384ms]
+  ✓  HTTP 200
+
+→ 20 New session for reporter
+  GET https://campusfind-sai.onrender.com/api/auth/me [200 OK, 1.45kB, 276ms]
+  ✓  HTTP 200
+
+→ 21 Login reporter
+  POST https://campusfind-sai.onrender.com/api/auth/login [200 OK, 1.69kB, 2.7s]
+  ✓  HTTP 200
+
+→ 22 Approve request as reporter
+  PATCH https://campusfind-sai.onrender.com/api/claims/6af09d0977f95512ea18b23f [200 OK, 1.22kB, 785ms]
+  ✓  HTTP 200
+
+→ 23 Verify recovered status
+  GET https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c [200 OK, 1.64kB, 507ms]
+  ✓  HTTP 200
+  ✓  Item recovered
+
+→ 24 Preserve claim history on delete
+  DELETE https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c [409 Conflict, 1.3kB, 509ms]
+  ✓  HTTP 409
+
+→ 25 Mutation without CSRF is rejected
+  PATCH https://campusfind-sai.onrender.com/api/items/6af09d0277f95512ea18b23c [403 Forbidden, 1.25kB, 313ms]
+  ✓  HTTP 403
+
+→ 26 Final logout
+  POST https://campusfind-sai.onrender.com/api/auth/logout [200 OK, 1.29kB, 380ms]
+  ✓  HTTP 200
+
+┌─────────────────────────┬────────────────────┬────────────────────┐
+│                         │           executed │             failed │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              iterations │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│                requests │                 26 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│            test-scripts │                 26 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│      prerequest-scripts │                  0 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              assertions │                 29 │                  0 │
+├─────────────────────────┴────────────────────┴────────────────────┤
+│ total run duration: 20.9s                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ total data received: 3.07kB (approx)                              │
+├───────────────────────────────────────────────────────────────────┤
+│ average response time: 791ms [min: 276ms, max: 2.7s, s.d.: 683ms] │
+└───────────────────────────────────────────────────────────────────┘
+PASS Live Postman collection passes
+LIVE RESULT: 36 passed; 0 failed; complete=true

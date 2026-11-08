@@ -1,0 +1,192 @@
+{
+  "startedAt": "2026-11-08T16:01:35.078Z",
+  "url": "https://campusfind-sai.onrender.com",
+  "run": "1794153695077-528368",
+  "checks": [
+    {
+      "name": "Live database health",
+      "result": "PASS"
+    },
+    {
+      "name": "Live frontend HTML served",
+      "result": "PASS"
+    },
+    {
+      "name": "Production security headers",
+      "result": "PASS"
+    },
+    {
+      "name": "Anonymous report denied",
+      "result": "PASS",
+      "httpStatus": 401
+    },
+    {
+      "name": "Invalid registration denied",
+      "result": "PASS",
+      "httpStatus": 400
+    },
+    {
+      "name": "reporter: registration creates student",
+      "result": "PASS",
+      "httpStatus": 201
+    },
+    {
+      "name": "claimant: registration creates student",
+      "result": "PASS",
+      "httpStatus": 201
+    },
+    {
+      "name": "stranger: registration creates student",
+      "result": "PASS",
+      "httpStatus": 201
+    },
+    {
+      "name": "Student denied administrator statistics",
+      "result": "PASS",
+      "httpStatus": 403
+    },
+    {
+      "name": "Missing CSRF token denied",
+      "result": "PASS",
+      "httpStatus": 403
+    },
+    {
+      "name": "Future report date denied",
+      "result": "PASS",
+      "httpStatus": 400
+    },
+    {
+      "name": "Multipart report and image created",
+      "result": "PASS",
+      "httpStatus": 201
+    },
+    {
+      "name": "Persisted image retrieved with exact bytes",
+      "result": "PASS"
+    },
+    {
+      "name": "Reporter updates own report",
+      "result": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "Another student cannot edit report",
+      "result": "PASS",
+      "httpStatus": 403
+    },
+    {
+      "name": "Keyword/category/building/type filters retrieve report",
+      "result": "PASS"
+    },
+    {
+      "name": "Student dashboard personal-listings data",
+      "result": "PASS"
+    },
+    {
+      "name": "Public detail excludes reporter credentials",
+      "result": "PASS"
+    },
+    {
+      "name": "Reporter cannot claim own item",
+      "result": "PASS",
+      "httpStatus": 400
+    },
+    {
+      "name": "Short claim evidence denied",
+      "result": "PASS",
+      "httpStatus": 400
+    },
+    {
+      "name": "Claim submitted",
+      "result": "PASS",
+      "httpStatus": 201
+    },
+    {
+      "name": "Duplicate claim denied",
+      "result": "PASS",
+      "httpStatus": 409
+    },
+    {
+      "name": "Uninvolved student cannot see private claim",
+      "result": "PASS"
+    },
+    {
+      "name": "Claimant cannot approve own claim",
+      "result": "PASS",
+      "httpStatus": 403
+    },
+    {
+      "name": "Reporter dashboard incoming request",
+      "result": "PASS"
+    },
+    {
+      "name": "Second synthetic claim submitted",
+      "result": "PASS",
+      "httpStatus": 201
+    },
+    {
+      "name": "Reporter rejects claim",
+      "result": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "Claimant dashboard displays rejection",
+      "result": "PASS"
+    },
+    {
+      "name": "Reporter approves transaction",
+      "result": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "Recovered item status persisted",
+      "result": "PASS"
+    },
+    {
+      "name": "Claimant dashboard displays approval",
+      "result": "PASS"
+    },
+    {
+      "name": "Recovered item cannot reopen",
+      "result": "PASS",
+      "httpStatus": 409
+    },
+    {
+      "name": "Reporter logout",
+      "result": "PASS"
+    },
+    {
+      "name": "Logout removes protected access",
+      "result": "PASS",
+      "httpStatus": 401
+    },
+    {
+      "name": "Existing registered user can log in again",
+      "result": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "Live Postman collection passes",
+      "result": "PASS",
+      "requests": 26,
+      "assertions": 29
+    }
+  ],
+  "records": [
+    {
+      "itemId": "6af09ceb77f95512ea18b236",
+      "name": "QA LIVE notebook 1794153695077-528368",
+      "claimId": "6af09cef77f95512ea18b237",
+      "rejectedClaimId": "6af09cf277f95512ea18b239",
+      "status": "recovered"
+    }
+  ],
+  "limitations": [
+    "Real-browser authenticated dashboard and mobile layout checks are separate from API checks.",
+    "Positive administrator access requires a private administrator session and is not tested by these synthetic student accounts."
+  ],
+  "completedAt": "2026-11-08T16:02:26.305Z",
+  "passed": 36,
+  "failed": 0,
+  "complete": true
+}

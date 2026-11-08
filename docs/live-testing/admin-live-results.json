@@ -1,0 +1,26 @@
+{
+  "verifiedAt": "2026-11-08T16:02:25.031Z",
+  "url": "https://campusfind-sai.onrender.com",
+  "checks": [
+    "Administrator login and role",
+    "Student login and role",
+    "Student denied admin endpoint",
+    "Administrator statistics retrieved",
+    "Live multipart report created",
+    "Uploaded image retrieved intact",
+    "Recovery request submitted",
+    "Reporter sees incoming request",
+    "Reporter approves recovery transaction",
+    "Recovered item status persisted",
+    "Claimant receives approved status",
+    "Logout invalidates student session"
+  ],
+  "passed": 12,
+  "testRecord": {
+    "itemId": "6af09cfb77f95512ea18b23a",
+    "claimId": "6af09d0477f95512ea18b23d",
+    "name": "QA verification notebook",
+    "status": "recovered"
+  },
+  "notes": "Synthetic assessment record retained to preserve claim history. No credentials or session tokens are stored in this evidence."
+}

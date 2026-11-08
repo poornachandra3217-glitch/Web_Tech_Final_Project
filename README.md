@@ -1,6 +1,15 @@
 # CampusFind
 
+Student: **Poorna Chandra Manupati** · PRN **250200322** · Semester **3**  
+Course lecturer: **Rupam Sah** · Submission: **30 November 2026**
+
+[Project report (PDF)](docs/CampusFind_Project_Report.pdf) · [Editable report (Word)](docs/CampusFind_Project_Report.docx) · [Live testing evidence](docs/LIVE_TESTING.md)
+
 Project repository: https://github.com/poornachandra3217-glitch/Web_Tech_Final_Project
+
+Live application: https://campusfind-sai.onrender.com
+
+Deployment: Render free web service in Singapore, backed by the existing Atlas Cluster0 and the isolated campusfind database. Health, sample retrieval, persistence across redeployment and public browser workflows are verified. See docs/live-verification.json and docs/screenshots/.
 
 A full-stack Campus Lost and Found Portal for the Sai University Web Technology and Internet Programming individual project, academic year 2026–2027. Built with semantic HTML, CSS, JavaScript ES modules, Express and MongoDB.
 
@@ -79,7 +88,7 @@ Reports with claims cannot be deleted or rewritten; close them instead. Recovere
 
 ## Deployment and submission
 
-See `docs/DEPLOYMENT.md`, `docs/API.md`, `docs/VIVA.md` and `docs/SUBMISSION.md`. A Render configuration is supplied, but no cloud deployment or GitHub publication is claimed without the corresponding account setup and verified URLs. The report content is complete for the implemented scope; final formatting must be transferred into the prescribed Sai University template once supplied. Replace student/instructor details and deployment/repository placeholders before submission.
+See `docs/DEPLOYMENT.md`, `docs/API.md`, `docs/VIVA.md` and `docs/SUBMISSION.md`. The application is published to the repository and live URL above. Live testing passed on 8 November 2026: 36 workflow checks, 12 separate administrator/student checks, and 26 Postman requests with 29 assertions. See `docs/LIVE_TESTING.md` and the evidence PDF under `docs/live-testing/`. The report has been prepared using the supplied Sai University format; personal details and signatures remain to be completed. Authenticated dashboard screenshots and physical mobile-layout checks remain separate visual verification tasks.
 
 ## AI assistance
 

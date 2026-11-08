@@ -1,0 +1,41 @@
+{
+  "verifiedAt": "2026-11-08T16:02:26.305Z",
+  "url": "https://campusfind-sai.onrender.com",
+  "workflowRunUrl": "https://github.com/poornachandra3217-glitch/Web_Tech_Final_Project/actions/runs/42497400267",
+  "workflowCommit": "43db20ef2e4ceda87d94f1ddd34d8746b425c002",
+  "applicationCommit": "3a46bcfb9adef9cd731bdf2524857ff58a18c15a",
+  "recoveryDeployId": "dep-dbo9ot95efls73d8lv4g",
+  "liveWorkflow": {
+    "passed": 36,
+    "failed": 0,
+    "complete": true
+  },
+  "administratorSmoke": {
+    "passed": 12,
+    "failed": 0
+  },
+  "postman": {
+    "requests": 26,
+    "assertions": 29,
+    "failures": 0,
+    "meanResponseMs": 791.5
+  },
+  "availabilityIncident": {
+    "initialRun": "Health request timed out after 90 seconds before mutations",
+    "action": "Redeployed same application commit",
+    "outcome": "Render live; complete live suites passed",
+    "rootCause": "Not established; no application code defect demonstrated"
+  },
+  "browserChecks": [
+    "Fresh frontend loads after redeployment",
+    "Synthetic recovered item displays recovered state without an active claim button",
+    "GitHub live assessment run displays Success"
+  ],
+  "remaining": [
+    "Authenticated dashboard visual screenshots",
+    "Physical mobile-device layout verification",
+    "Optional Postman desktop GUI screenshots if required by instructor"
+  ],
+  "testData": "Three labelled synthetic reports with claim history retained; test accounts retained. No real property or real ownership evidence used.",
+  "privacy": "No passwords, session cookies, CSRF tokens, connection strings or private evidence exported."
+}

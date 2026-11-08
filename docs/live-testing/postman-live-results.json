@@ -1,0 +1,394 @@
+{
+  "completedAt": "2026-11-08T16:02:26.304Z",
+  "url": "https://campusfind-sai.onrender.com",
+  "stats": {
+    "iterations": {
+      "total": 1,
+      "pending": 0,
+      "failed": 0
+    },
+    "items": {
+      "total": 26,
+      "pending": 0,
+      "failed": 0
+    },
+    "scripts": {
+      "total": 26,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequests": {
+      "total": 26,
+      "pending": 0,
+      "failed": 0
+    },
+    "requests": {
+      "total": 26,
+      "pending": 0,
+      "failed": 0
+    },
+    "tests": {
+      "total": 26,
+      "pending": 0,
+      "failed": 0
+    },
+    "assertions": {
+      "total": 29,
+      "pending": 0,
+      "failed": 0
+    },
+    "testScripts": {
+      "total": 26,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequestScripts": {
+      "total": 0,
+      "pending": 0,
+      "failed": 0
+    }
+  },
+  "timings": {
+    "responseAverage": 791.5,
+    "responseMin": 276,
+    "responseMax": 2701,
+    "responseSd": 683.4366916828957,
+    "dnsAverage": 0,
+    "dnsMin": 0,
+    "dnsMax": 0,
+    "dnsSd": 0,
+    "firstByteAverage": 0,
+    "firstByteMin": 0,
+    "firstByteMax": 0,
+    "firstByteSd": 0,
+    "started": 1794153725342,
+    "completed": 1794153746298
+  },
+  "failures": [],
+  "executions": [
+    {
+      "name": "01 Start session and get CSRF token",
+      "method": "GET",
+      "status": 200,
+      "responseTimeMs": 310,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "02 Protected report rejects anonymous access",
+      "method": "POST",
+      "status": 401,
+      "responseTimeMs": 334,
+      "assertions": [
+        {
+          "name": "HTTP 401",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "03 Invalid registration",
+      "method": "POST",
+      "status": 400,
+      "responseTimeMs": 869,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "04 Register reporter",
+      "method": "POST",
+      "status": 201,
+      "responseTimeMs": 2666,
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "05 Invalid listing validation",
+      "method": "POST",
+      "status": 400,
+      "responseTimeMs": 400,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "06 Create found listing",
+      "method": "POST",
+      "status": 201,
+      "responseTimeMs": 452,
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "07 Retrieve item",
+      "method": "GET",
+      "status": 200,
+      "responseTimeMs": 928,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Owner email stays private",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "08 Search and filter",
+      "method": "GET",
+      "status": 200,
+      "responseTimeMs": 446,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Created item found",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "09 Update item",
+      "method": "PATCH",
+      "status": 200,
+      "responseTimeMs": 786,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "10 Self claim rejected",
+      "method": "POST",
+      "status": 400,
+      "responseTimeMs": 464,
+      "assertions": [
+        {
+          "name": "HTTP 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "11 Logout reporter",
+      "method": "POST",
+      "status": 200,
+      "responseTimeMs": 639,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "12 New anonymous session",
+      "method": "GET",
+      "status": 200,
+      "responseTimeMs": 618,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "13 Register claimant",
+      "method": "POST",
+      "status": 201,
+      "responseTimeMs": 2441,
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "14 Another user cannot update listing",
+      "method": "PATCH",
+      "status": 403,
+      "responseTimeMs": 451,
+      "assertions": [
+        {
+          "name": "HTTP 403",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "15 Submit claim",
+      "method": "POST",
+      "status": 201,
+      "responseTimeMs": 514,
+      "assertions": [
+        {
+          "name": "HTTP 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "16 Duplicate claim rejected",
+      "method": "POST",
+      "status": 409,
+      "responseTimeMs": 901,
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "17 Claimant cannot approve claim",
+      "method": "PATCH",
+      "status": 403,
+      "responseTimeMs": 911,
+      "assertions": [
+        {
+          "name": "HTTP 403",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "18 Student cannot access admin statistics",
+      "method": "GET",
+      "status": 403,
+      "responseTimeMs": 594,
+      "assertions": [
+        {
+          "name": "HTTP 403",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "19 Logout claimant",
+      "method": "POST",
+      "status": 200,
+      "responseTimeMs": 384,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "20 New session for reporter",
+      "method": "GET",
+      "status": 200,
+      "responseTimeMs": 276,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "21 Login reporter",
+      "method": "POST",
+      "status": 200,
+      "responseTimeMs": 2701,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "22 Approve request as reporter",
+      "method": "PATCH",
+      "status": 200,
+      "responseTimeMs": 785,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "23 Verify recovered status",
+      "method": "GET",
+      "status": 200,
+      "responseTimeMs": 507,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        },
+        {
+          "name": "Item recovered",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "24 Preserve claim history on delete",
+      "method": "DELETE",
+      "status": 409,
+      "responseTimeMs": 509,
+      "assertions": [
+        {
+          "name": "HTTP 409",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "25 Mutation without CSRF is rejected",
+      "method": "PATCH",
+      "status": 403,
+      "responseTimeMs": 313,
+      "assertions": [
+        {
+          "name": "HTTP 403",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "26 Final logout",
+      "method": "POST",
+      "status": 200,
+      "responseTimeMs": 380,
+      "assertions": [
+        {
+          "name": "HTTP 200",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}
