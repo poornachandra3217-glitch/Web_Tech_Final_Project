@@ -363,3 +363,52 @@ test("28 rejects short claim evidence", async () => {
     .send({ evidence: "mine" });
   assert.equal(r.status, 400);
 });
+
+test("complaints are private and only administrators can resolve them", async () => {
+  const created = await reporter
+    .post("/api/complaints")
+    .set("x-csrf-token", reporterToken)
+    .send({
+      subject: "Incorrect campus location",
+      description: "The listing references the wrong campus building.",
+      status: "resolved",
+    });
+  assert.equal(created.status, 201);
+  const url = "/api/admin/complaints/" + created.body.id;
+  assert.equal(
+    (await claimant.get("/api/complaints")).body.complaints.length,
+    0,
+  );
+  assert.equal((await claimant.get("/api/admin/complaints")).status, 403);
+  const payload = {
+    status: "resolved",
+    response: "The location has been corrected.",
+  };
+  assert.equal(
+    (await reporter.patch(url).set("x-csrf-token", reporterToken).send(payload))
+      .status,
+    403,
+  );
+  const queue = await admin.get("/api/admin/complaints?status=open");
+  assert.equal(queue.status, 200);
+  assert.equal(queue.body.complaints[0]._id, created.body.id);
+  assert.equal(
+    (await admin.patch(url).set("x-csrf-token", adminToken).send(payload))
+      .status,
+    200,
+  );
+  const mine = await reporter.get("/api/complaints");
+  assert.equal(mine.body.complaints[0].status, "resolved");
+  assert.equal(mine.body.complaints[0].response, payload.response);
+});
+
+test("administrator sign-in refuses a student without creating a session", async () => {
+  const visitor = request.agent(app);
+  const { body } = await visitor.get("/api/auth/me");
+  const denied = await visitor
+    .post("/api/auth/admin-login")
+    .set("x-csrf-token", body.csrfToken)
+    .send({ email: "reporter@example.com", password: "Test-Password-123!" });
+  assert.equal(denied.status, 403);
+  assert.equal((await visitor.get("/api/auth/me")).body.user, null);
+});

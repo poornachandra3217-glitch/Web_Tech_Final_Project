@@ -1389,3 +1389,77 @@ dialog p {
     scroll-behavior: auto !important;
   }
 }
+
+:root {
+  --green: #124639;
+  --green2: #216555;
+  --paper: #f6f8f5;
+  --muted: #52635b;
+}
+.hero {
+  background: linear-gradient(120deg, #103b32, #226653);
+}
+.card {
+  box-shadow: 0 4px 18px #183d2810;
+}
+.auth-layout {
+  box-shadow: 0 18px 55px #183d2817;
+}
+.signin-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 24px;
+  background: var(--paper);
+  border-radius: 12px;
+}
+.signin-tabs a {
+  flex: 1;
+  padding: 10px 7px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 650;
+  border-radius: 8px;
+}
+.signin-tabs a[aria-current="page"] {
+  background: var(--green);
+  color: white;
+}
+.complaint-tools,
+.complaint-list {
+  margin-top: 20px;
+}
+.complaint-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.complaint-tools a {
+  text-decoration: underline;
+}
+.complaint-list {
+  display: grid;
+  gap: 16px;
+}
+.complaint-card {
+  max-width: 850px;
+}
+.complaint-card .field {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0;
+}
+.complaint-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.complaint-state {
+  background: #e3efe8;
+  color: var(--green);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}

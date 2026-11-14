@@ -76,3 +76,19 @@ claimSchema.index({ item: 1, claimant: 1 }, { unique: true });
 export const User = model("User", userSchema);
 export const Item = model("Item", itemSchema);
 export const Claim = model("Claim", claimSchema);
+
+export const COMPLAINT_STATUSES = ["open", "in_review", "resolved"];
+const complaintSchema = new Schema(
+  {
+    reporter: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    subject: text(100, { required: true }),
+    description: text(1500, { required: true, minlength: 15 }),
+    status: { type: String, enum: COMPLAINT_STATUSES, default: "open" },
+    response: text(500),
+    reviewedBy: { type: Schema.Types.ObjectId, ref: "User" },
+  },
+  { timestamps: true },
+);
+complaintSchema.index({ reporter: 1, createdAt: -1 });
+complaintSchema.index({ status: 1, createdAt: -1 });
+export const Complaint = model("Complaint", complaintSchema);

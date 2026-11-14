@@ -9,7 +9,15 @@ import crypto from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import mongoose from "mongoose";
-import { User, Item, Claim, CATEGORIES, LOCATIONS } from "./models.js";
+import {
+  User,
+  Item,
+  Claim,
+  Complaint,
+  COMPLAINT_STATUSES,
+  CATEGORIES,
+  LOCATIONS,
+} from "./models.js";
 const root = path.dirname(fileURLToPath(import.meta.url));
 const fail = (status, message) => Object.assign(new Error(message), { status });
 const cleanUser = (u) => ({
@@ -217,7 +225,7 @@ export function createApp({ mongoUrl, secret, store, testing = false } = {}) {
     }),
   );
   app.post(
-    "/api/auth/login",
+    ["/api/auth/login", "/api/auth/admin-login"],
     authLimiter,
     wrap(async (req, res) => {
       const email = str(req.body.email, 160).toLowerCase(),
@@ -225,6 +233,8 @@ export function createApp({ mongoUrl, secret, store, testing = false } = {}) {
       const user = await User.findOne({ email }).select("+passwordHash");
       if (!user || !(await bcrypt.compare(password, user.passwordHash)))
         throw fail(401, "Email or password is incorrect.");
+      if (req.path.endsWith("/admin-login") && user.role !== "admin")
+        throw fail(403, "Administrator access required.");
       await setSession(req, user);
       res.json({ user: cleanUser(user), csrfToken: req.session.csrf });
     }),
@@ -561,6 +571,80 @@ export function createApp({ mongoUrl, secret, store, testing = false } = {}) {
         ]),
       ]);
       res.json({ users, pending, byCategory });
+    }),
+  );
+  app.post(
+    "/api/complaints",
+    auth,
+    wrap(async (req, res) => {
+      const subject = str(req.body.subject, 100);
+      const description = str(req.body.description, 1500);
+      if (description.length < 15)
+        throw fail(400, "Describe the complaint in at least 15 characters.");
+      const complaint = await Complaint.create({
+        reporter: req.user.id,
+        subject,
+        description,
+      });
+      res
+        .status(201)
+        .json({ id: complaint.id, message: "Complaint submitted." });
+    }),
+  );
+  async function listComplaints(req, res, filter) {
+    const page = Math.max(
+      1,
+      Math.min(10000, Number.parseInt(req.query.page, 10) || 1),
+    );
+    const [complaints, total] = await Promise.all([
+      Complaint.find(filter)
+        .select("subject description status response createdAt updatedAt")
+        .sort({ createdAt: -1, _id: -1 })
+        .skip((page - 1) * 20)
+        .limit(20)
+        .lean(),
+      Complaint.countDocuments(filter),
+    ]);
+    res.json({ complaints, page, pages: Math.max(1, Math.ceil(total / 20)) });
+  }
+  app.get(
+    "/api/complaints",
+    auth,
+    wrap((req, res) => listComplaints(req, res, { reporter: req.user.id })),
+  );
+  app.get(
+    "/api/admin/complaints",
+    auth,
+    admin,
+    wrap((req, res) => {
+      const { status } = req.query;
+      if (status !== undefined && !COMPLAINT_STATUSES.includes(status))
+        throw fail(400, "Invalid complaint status.");
+      return listComplaints(req, res, status ? { status } : {});
+    }),
+  );
+  app.patch(
+    "/api/admin/complaints/:id",
+    auth,
+    admin,
+    wrap(async (req, res) => {
+      const { status, response } = req.body;
+      if (!COMPLAINT_STATUSES.includes(status))
+        throw fail(400, "Invalid complaint status.");
+      const note = response === "" ? "" : str(response, 500);
+      if (status === "resolved" && !note)
+        throw fail(400, "Add a response before resolving the complaint.");
+      const updated = await Complaint.findByIdAndUpdate(
+        req.params.id,
+        {
+          status,
+          response: note,
+          reviewedBy: req.user.id,
+        },
+        { runValidators: true },
+      );
+      if (!updated) throw fail(404, "Complaint not found.");
+      res.json({ message: "Complaint updated." });
     }),
   );
   app.use("/api", (req, res, next) =>

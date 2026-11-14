@@ -49,8 +49,13 @@ function navigation() {
     ["#/", "Home"],
     ["#/browse", "Browse items"],
     ["#/guide", "How it works"],
-    ...(state.user ? [["#/dashboard", "Dashboard"]] : []),
-    ...(state.user?.role === "admin" ? [["#/admin", "Admin"]] : []),
+    ...(state.user
+      ? [
+          ["#/dashboard", "Dashboard"],
+          ["#/complaints", "Complaints"],
+        ]
+      : []),
+    ...(state.user?.role === "admin" ? [["#/admin", "Admin portal"]] : []),
   ]
     .map(
       ([url, label]) =>
@@ -182,20 +187,31 @@ function bindForm(id, handler) {
     }
   });
 }
-function authPage(register, params) {
+function authPage(register, params, administrator = false) {
+  if (administrator && state.user?.role === "admin") {
+    location.hash = "#/admin";
+    return;
+  }
   shell(
-    `<div class="auth-layout"><section class="auth-intro"><div><div class="eyebrow">WELCOME TO YOUR CAMPUS COMMUNITY</div><h2>Good things<br>find their way<br>back.</h2><p>A little help from your campus can make all the difference.</p></div><img src="/art.svg" alt="An illustration of lost campus belongings"></section><section class="auth-form"><h2>${register ? "Join the community" : "Welcome back."}</h2><p class="form-subtitle">${register ? "Create your account and help your campus reconnect." : "Sign in to report, claim and reconnect."}</p><form id="auth-form">${register ? '<div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" maxlength="80" required></div>' : ""}<div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="${register ? "new-password" : "current-password"}" ${register ? 'minlength="10"' : ""} maxlength="72" required>${register ? "<small>Use at least 10 characters. Maximum 72 UTF-8 bytes.</small>" : ""}</div><button class="button" type="submit">${register ? "Create account" : "Sign in"} ${icon("arrow")}</button></form><p class="auth-switch">${register ? "Already part of the community?" : "New around here?"} <a href="#/${register ? "login" : "register"}?next=${encodeURIComponent(params.get("next") || "/dashboard")}">${register ? "Sign in" : "Create an account"}</a></p></section></div>`,
+    `<div class="auth-layout"><section class="auth-intro"><div><div class="eyebrow">WELCOME TO YOUR CAMPUS COMMUNITY</div><h2>Good things<br>find their way<br>back.</h2><p>A little help from your campus can make all the difference.</p></div><img src="/art.svg" alt="An illustration of lost campus belongings"></section><section class="auth-form"><nav class="signin-tabs" aria-label="Sign-in options"><a href="#/login" ${!administrator ? 'aria-current="page"' : ""}>Student sign-in</a><a href="#/admin-login" ${administrator ? 'aria-current="page"' : ""}>Admin portal</a></nav><h2>${administrator ? "Administrator sign-in" : register ? "Create your account" : "Welcome back."}</h2><p class="form-subtitle">${administrator ? "Sign in to review complaints, listings and recovery requests." : register ? "Register to report items and track requests." : "Sign in to report items and track requests."}</p><form id="auth-form">${register ? '<div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" maxlength="80" required></div>' : ""}<div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="${register ? "new-password" : "current-password"}" ${register ? 'minlength="10"' : ""} maxlength="72" required>${register ? "<small>Use at least 10 characters. Maximum 72 UTF-8 bytes.</small>" : ""}</div><button class="button" type="submit">${register ? "Create account" : "Sign in"} ${icon("arrow")}</button></form><p class="auth-switch" ${administrator ? "hidden" : ""}>${register ? "Already part of the community?" : "New around here?"} <a href="#/${register ? "login" : "register"}?next=${encodeURIComponent(params.get("next") || "/dashboard")}">${register ? "Sign in" : "Create an account"}</a></p></section></div>`,
   );
   bindForm("#auth-form", async (f) => {
-    const data = await api(`/auth/${register ? "register" : "login"}`, {
-      method: "POST",
-      body: Object.fromEntries(new FormData(f)),
-    });
+    const data = await api(
+      `/auth/${register ? "register" : administrator ? "admin-login" : "login"}`,
+      {
+        method: "POST",
+        body: Object.fromEntries(new FormData(f)),
+      },
+    );
     state.user = data.user;
+    if (data.user.role === "admin") {
+      location.hash = "#/admin";
+      return;
+    }
     const next = params.get("next") || "/dashboard";
     location.hash =
       "#" +
-      (/^\/(report|dashboard|items\/[a-f0-9]+)(\?.*)?$/.test(next)
+      (/^\/(report|dashboard|complaints|items\/[a-f0-9]+)(\?.*)?$/.test(next)
         ? next
         : "/dashboard");
     toast(register ? "Welcome to CampusFind." : "Good to see you again.");
@@ -379,7 +395,10 @@ async function dashboard(params, token) {
   bindReviews();
 }
 async function adminPage(params, token) {
-  if (!requireAuth("/admin")) return;
+  if (!state.user) {
+    location.hash = "#/admin-login";
+    return;
+  }
   if (state.user.role !== "admin")
     throw new Error("Administrator access required.");
   const [stats, extra, data, { claims }] = await Promise.all([
@@ -402,7 +421,7 @@ async function adminPage(params, token) {
       )
       .join(
         "",
-      )}</div><div class="admin-layout"><section class="panel"><h3>Items by category</h3><div class="chart">${extra.byCategory.map((x) => `<div class="chart-row"><span>${esc(x._id)}</span><progress max="${max}" value="${x.count}" class="w-100" aria-label="${esc(x._id)} count"></progress><strong>${x.count}</strong></div>`).join("")}</div></section><section class="panel"><h3>Recovery overview</h3><p class="muted">${stats.recovered} items marked recovered · ${stats.open} open reports</p><div class="notice">Approve claims only after ownership verification. Approval updates the item and all related pending requests together.</div><a class="button light small" href="#/report">Add a campus report ${icon("plus")}</a></section></div><div class="section-heading"><h2>Campus listings</h2><span class="count-label">Page ${data.page} of ${data.pages || 1}</span></div><div class="table-wrap"><table><thead><tr><th>Item</th><th>Type</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead><tbody>${data.items.map((i) => `<tr><td><a href="#/items/${i._id}">${esc(i.name)}</a></td><td>${badge(i.type)}</td><td>${esc(i.location)}</td><td>${badge(i.status)}</td><td><div class="detail-actions"><a class="button light small" href="#/edit/${i._id}">Edit</a><button class="button light small" data-manage="${i._id}" data-current="${i.status}">Status</button></div></td></tr>`).join("")}</tbody></table></div>${data.pages > 1 ? `<div class="pagination">${data.page > 1 ? `<a class="button light small" href="#/admin?page=${data.page - 1}">Previous</a>` : ""}${data.page < data.pages ? `<a class="button light small" href="#/admin?page=${data.page + 1}">Next</a>` : ""}</div>` : ""}<section class="spaced"><div class="section-heading"><h2>Recovery requests</h2><span class="count-label">Most recent ${claims.length} requests</span></div>${claims.length ? claims.map(claimCard).join("") : empty("No requests to review", "New recovery requests will appear here.")}</section>`,
+      )}</div><div class="admin-layout"><section class="panel"><h3>Items by category</h3><div class="chart">${extra.byCategory.map((x) => `<div class="chart-row"><span>${esc(x._id)}</span><progress max="${max}" value="${x.count}" class="w-100" aria-label="${esc(x._id)} count"></progress><strong>${x.count}</strong></div>`).join("")}</div></section><section class="panel"><h3>Recovery overview</h3><p class="muted">${stats.recovered} items marked recovered · ${stats.open} open reports</p><div class="notice">Approve claims only after ownership verification. Approval updates the item and all related pending requests together.</div><a class="button light small" href="#/report">Add a campus report ${icon("plus")}</a></section></div><div class="section-heading"><h2>Campus listings</h2><a class="button light small" href="#/admin/complaints">Manage complaints ${icon("arrow")}</a><span class="count-label">Page ${data.page} of ${data.pages || 1}</span></div><div class="table-wrap"><table><thead><tr><th>Item</th><th>Type</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead><tbody>${data.items.map((i) => `<tr><td><a href="#/items/${i._id}">${esc(i.name)}</a></td><td>${badge(i.type)}</td><td>${esc(i.location)}</td><td>${badge(i.status)}</td><td><div class="detail-actions"><a class="button light small" href="#/edit/${i._id}">Edit</a><button class="button light small" data-manage="${i._id}" data-current="${i.status}">Status</button></div></td></tr>`).join("")}</tbody></table></div>${data.pages > 1 ? `<div class="pagination">${data.page > 1 ? `<a class="button light small" href="#/admin?page=${data.page - 1}">Previous</a>` : ""}${data.page < data.pages ? `<a class="button light small" href="#/admin?page=${data.page + 1}">Next</a>` : ""}</div>` : ""}<section class="spaced"><div class="section-heading"><h2>Recovery requests</h2><span class="count-label">Most recent ${claims.length} requests</span></div>${claims.length ? claims.map(claimCard).join("") : empty("No requests to review", "New recovery requests will appear here.")}</section>`,
   );
   bindReviews();
   $$("[data-manage]").forEach((b) =>
@@ -421,6 +440,108 @@ async function adminPage(params, token) {
       });
     }),
   );
+}
+const complaintStatuses = {
+  open: "Open",
+  in_review: "In review",
+  resolved: "Resolved",
+};
+async function complaintsPage(administrator, params, token) {
+  if (administrator) {
+    if (!state.user) {
+      location.hash = "#/admin-login";
+      return;
+    }
+    if (state.user.role !== "admin")
+      throw new Error("Administrator access required.");
+  } else if (!requireAuth("/complaints")) return;
+
+  const path = administrator ? "/admin/complaints" : "/complaints";
+  const query = new URLSearchParams({ page: params.get("page") || "1" });
+  const status = params.get("status") || "";
+  if (administrator && Object.hasOwn(complaintStatuses, status))
+    query.set("status", status);
+  const { complaints, page, pages } = await api(path + "?" + query);
+  if (token !== routeNumber) return;
+
+  const options = (selected) =>
+    Object.entries(complaintStatuses)
+      .map(
+        ([value, label]) =>
+          `<option value="${value}" ${selected === value ? "selected" : ""}>${label}</option>`,
+      )
+      .join("");
+  const cards = complaints
+    .map(
+      (c) => `<article class="panel complaint-card">
+    <div class="section-heading"><h3>${esc(c.subject)}</h3><span class="complaint-state">${esc(complaintStatuses[c.status])}</span></div>
+    <p class="muted">${fmt(c.createdAt)}</p><p class="complaint-text">${esc(c.description)}</p>
+    ${
+      administrator
+        ? `<form class="complaint-review" data-id="${esc(c._id)}">
+      <label class="field">Status<select name="status">${options(c.status)}</select></label>
+      <label class="field">Response visible to the reporter<textarea name="response" maxlength="500">${esc(c.response || "")}</textarea></label>
+      <button type="submit" class="button small">Save decision</button>
+    </form>`
+        : c.response
+          ? `<div class="notice"><strong>Administrator response</strong><p class="complaint-text">${esc(c.response)}</p></div>`
+          : ""
+    }
+  </article>`,
+    )
+    .join("");
+  const pageLink = (n, label) => {
+    const next = new URLSearchParams(query);
+    next.set("page", n);
+    return `<a class="button light small" href="#${path}?${next}">${label}</a>`;
+  };
+  shell(`${head(
+    administrator ? "ADMIN PORTAL" : "CAMPUS SUPPORT",
+    administrator ? "Manage complaints" : "Your complaints",
+    administrator
+      ? "Review submissions and send a response to the reporter."
+      : "Report a problem with CampusFind or a listing and track the response.",
+  )}
+    ${
+      administrator
+        ? `<div class="complaint-tools"><a href="#/admin">Back to admin dashboard</a>
+      <label>Status <select id="complaint-filter"><option value="">All statuses</option>${options(status)}</select></label></div>`
+        : `<form id="complaint-form" class="panel complaint-card"><h2>Submit a complaint</h2>
+        <label class="field">Subject<input name="subject" required maxlength="100"></label>
+        <label class="field">Details<textarea name="description" required minlength="15" maxlength="1500" placeholder="Include the listing link if relevant."></textarea></label>
+        <button type="submit" class="button">Submit complaint</button>
+      </form>`
+    }
+    <div class="complaint-list">${cards || '<p class="panel">No complaints found.</p>'}</div>
+    ${pages > 1 ? `<div class="pagination">${page > 1 ? pageLink(page - 1, "Previous") : ""}<span>Page ${page} of ${pages}</span>${page < pages ? pageLink(page + 1, "Next") : ""}</div>` : ""}`);
+  if (!administrator) {
+    bindForm("#complaint-form", async (form) => {
+      await api(path, {
+        method: "POST",
+        body: Object.fromEntries(new FormData(form)),
+      });
+      if (token !== routeNumber) return;
+      if (page === 1) await render();
+      else location.hash = "#/complaints";
+      toast("Complaint submitted.");
+    });
+    return;
+  }
+  $("#complaint-filter").addEventListener("change", (event) => {
+    location.hash = `#${path}${event.target.value ? "?status=" + encodeURIComponent(event.target.value) : ""}`;
+  });
+  for (const [index, form] of $$(".complaint-review").entries()) {
+    form.id = `complaint-review-${index}`;
+    bindForm("#" + form.id, async () => {
+      await api(path + "/" + form.dataset.id, {
+        method: "PATCH",
+        body: Object.fromEntries(new FormData(form)),
+      });
+      if (token !== routeNumber) return;
+      await render();
+      toast("Complaint updated.");
+    });
+  }
 }
 function guide() {
   shell(
@@ -463,6 +584,9 @@ async function render() {
     else if (path === "/browse") await browse(false, params, token);
     else if (path === "/login" || path === "/register")
       authPage(path === "/register", params);
+    else if (path === "/admin-login") authPage(false, params, true);
+    else if (path === "/complaints" || path === "/admin/complaints")
+      await complaintsPage(path.startsWith("/admin"), params, token);
     else if (path === "/report") await reportPage(params, token);
     else if (/^\/edit\/[a-f0-9]{24}$/.test(path))
       await reportPage(params, token, path.split("/")[2]);
