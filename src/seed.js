@@ -13,11 +13,20 @@ export async function seed({ adminEmail, adminPassword, demoPassword } = {}) {
     throw new Error(
       "Set ADMIN_EMAIL, ADMIN_PASSWORD and DEMO_PASSWORD (10+ characters).",
     );
-  let admin = await User.findOne({ email: adminEmail });
+  const email = adminEmail.trim().toLowerCase();
+  let admin = await User.findOne({ email }).select("+passwordHash");
+  if (admin && admin.role !== "admin")
+    throw new Error(
+      "Configured administrator email belongs to a student account.",
+    );
+  if (admin && !(await bcrypt.compare(adminPassword, admin.passwordHash))) {
+    admin.passwordHash = await bcrypt.hash(adminPassword, 12);
+    await admin.save();
+  }
   if (!admin)
     admin = await User.create({
       name: "Campus Administrator",
-      email: adminEmail,
+      email,
       passwordHash: await bcrypt.hash(adminPassword, 12),
       role: "admin",
     });

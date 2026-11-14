@@ -117,7 +117,7 @@ async function browse(home, params, token) {
   ]);
   if (token !== routeNumber) return;
   const hero = home
-    ? `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="dot"></span> A SMALL ACT. A BIG DIFFERENCE.</div><h1>Lost something?<br>Let's <em>find it together.</em></h1><p>Your campus. Your community. One place to reconnect with the things that matter.</p><div class="hero-actions"><a class="button lime" href="#/report?type=lost">${icon("search")} I've lost something</a><a class="button outline" href="#/report?type=found">${icon("plus")} I found something</a></div><div class="trust-line">${icon("shield")} Built for the Sai University community</div></div><img class="hero-art" src="/art.svg" alt="Illustrated campus belongings: backpack, phone, keys and ID card"></section><div class="stats-strip">${[
+    ? `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="dot"></span> A SMALL ACT. A BIG DIFFERENCE.</div><h1>Lost something?<br>Let's <em>find it together.</em></h1><p>Your campus. Your community. One place to reconnect with the things that matter.</p><div class="hero-actions"><a class="button lime" href="#/report?type=lost">${icon("search")} I've lost something</a><a class="button outline" href="#/report?type=found">${icon("plus")} I found something</a></div><a class="hero-browse" href="#/browse">Browse the noticeboard ${icon("arrow")}</a></div><img class="hero-art" src="/art.svg" alt="Illustrated campus belongings: backpack, phone, keys and ID card"></section><div class="stats-strip">${[
         ["box", stats.open, "Open listings"],
         ["search", stats.lost, "Looking for a home"],
         ["check", stats.found, "Found & waiting"],
@@ -129,14 +129,24 @@ async function browse(home, params, token) {
         )
         .join(
           "",
-        )}</div><div class="section-heading"><div><h2>Around the campus</h2><p>Something familiar? Your belongings might be closer than you think.</p></div><a class="text-link" href="#/browse">View all listings ${icon("arrow")}</a></div>`
+        )}</div><div class="section-heading"><div><h2>Recent campus listings</h2><p>Filter by item type, category or location.</p></div><a class="text-link" href="#/browse">View all listings ${icon("arrow")}</a></div>`
     : head(
         "THE CAMPUS NOTICEBOARD",
         "Find what you’re looking for.",
         "Search lost and found reports across the Sai University campus.",
       );
   shell(
-    `${hero}${filters(params)}<div class="filter-bar"><div class="tabs">${[
+    `${hero}${filters(params)}${
+      home
+        ? `<nav class="category-shortcuts" aria-label="Browse popular categories">${state.meta.categories
+            .slice(0, 5)
+            .map(
+              (category) =>
+                `<a href="#/browse?category=${encodeURIComponent(category)}">${esc(category)} ${icon("arrow")}</a>`,
+            )
+            .join("")}</nav>`
+        : ""
+    }<div class="filter-bar"><div class="tabs">${[
       ["", "All items"],
       ["lost", "Lost"],
       ["found", "Found"],
@@ -195,6 +205,18 @@ function authPage(register, params, administrator = false) {
   shell(
     `<div class="auth-layout"><section class="auth-intro"><div><div class="eyebrow">WELCOME TO YOUR CAMPUS COMMUNITY</div><h2>Good things<br>find their way<br>back.</h2><p>A little help from your campus can make all the difference.</p></div><img src="/art.svg" alt="An illustration of lost campus belongings"></section><section class="auth-form"><nav class="signin-tabs" aria-label="Sign-in options"><a href="#/login" ${!administrator ? 'aria-current="page"' : ""}>Student sign-in</a><a href="#/admin-login" ${administrator ? 'aria-current="page"' : ""}>Admin portal</a></nav><h2>${administrator ? "Administrator sign-in" : register ? "Create your account" : "Welcome back."}</h2><p class="form-subtitle">${administrator ? "Sign in to review complaints, listings and recovery requests." : register ? "Register to report items and track requests." : "Sign in to report items and track requests."}</p><form id="auth-form">${register ? '<div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" maxlength="80" required></div>' : ""}<div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="${register ? "new-password" : "current-password"}" ${register ? 'minlength="10"' : ""} maxlength="72" required>${register ? "<small>Use at least 10 characters. Maximum 72 UTF-8 bytes.</small>" : ""}</div><button class="button" type="submit">${register ? "Create account" : "Sign in"} ${icon("arrow")}</button></form><p class="auth-switch" ${administrator ? "hidden" : ""}>${register ? "Already part of the community?" : "New around here?"} <a href="#/${register ? "login" : "register"}?next=${encodeURIComponent(params.get("next") || "/dashboard")}">${register ? "Sign in" : "Create an account"}</a></p></section></div>`,
   );
+  const password = $("#password");
+  const reveal = document.createElement("button");
+  reveal.type = "button";
+  reveal.className = "password-toggle";
+  reveal.textContent = "Show password";
+  reveal.setAttribute("aria-controls", "password");
+  password.after(reveal);
+  reveal.addEventListener("click", () => {
+    const hidden = password.type === "password";
+    password.type = hidden ? "text" : "password";
+    reveal.textContent = hidden ? "Hide password" : "Show password";
+  });
   bindForm("#auth-form", async (f) => {
     const data = await api(
       `/auth/${register ? "register" : administrator ? "admin-login" : "login"}`,

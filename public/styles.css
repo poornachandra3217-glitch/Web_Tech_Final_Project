@@ -1463,3 +1463,73 @@ dialog p {
   font-size: 0.875rem;
   flex-shrink: 0;
 }
+
+.hero {
+  background:
+    radial-gradient(ellipse at 18% 4%, #267e66 0%, transparent 64%), #103b32;
+  box-shadow: 0 20px 52px #133d3526;
+}
+.hero-browse {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  color: #e5f3e9;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.hero-browse svg,
+.category-shortcuts svg {
+  width: 15px;
+  height: 15px;
+}
+.category-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 20px;
+}
+.category-shortcuts a {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #d2e0d6;
+  border-radius: 999px;
+  background: white;
+  color: var(--green);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+.category-shortcuts a:hover,
+.category-shortcuts a:focus-visible {
+  background: #e5f4eb;
+}
+.password-toggle {
+  justify-self: end;
+  margin-top: 6px;
+  background: transparent;
+  border: 0;
+  color: var(--green);
+  padding: 6px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.complaint-card {
+  border-left: 4px solid #64a88c;
+  box-shadow: 0 8px 24px #163e350c;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card,
+  .category-shortcuts a {
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease;
+  }
+  .card:hover,
+  .card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px #163e351f;
+  }
+}
