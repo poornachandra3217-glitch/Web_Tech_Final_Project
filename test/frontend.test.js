@@ -108,7 +108,7 @@ after(async () => {
   await db?.stop();
 });
 test("29 home module renders real database listings and statistics", () => {
-  assert.match(document.querySelector("h1").textContent, /Lost something/);
+  assert.match(document.querySelector("h1").textContent, /Campus lost\s+& found\./);
   assert.equal(document.querySelectorAll(".card").length, 8);
   assert.match(document.querySelector(".stats-strip").textContent, /12/);
 });
