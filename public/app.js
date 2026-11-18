@@ -41,7 +41,7 @@ function art(i, detail = false) {
   return `<div class="item-art ${esc(i.category.split(" ")[0].toLowerCase())} ${detail ? "detail-art" : ""}">${i.hasImage ? `<img src="/api/items/${esc(i._id)}/image" alt="${esc(i.name)}" ${detail ? "" : 'loading="lazy"'}>` : icon(itemIcon(i))}${badge(i.status === "open" ? i.type : i.status)}${i.sample ? '<span class="sample-tag">DEMO LISTING</span>' : ""}</div>`;
 }
 function card(i) {
-  return `<article class="card"><a class="card-link" href="#/items/${esc(i._id)}" aria-label="View ${esc(i.name)}">${art(i)}<div class="card-body"><div class="category">${esc(i.category)}</div><h3>${esc(i.name)}</h3><div class="card-meta">${icon("pin")}${esc(i.location)}</div><div class="card-meta">${icon("calendar")}${fmt(i.date)}</div><div class="card-bottom"><span>${i.type === "lost" ? "Help bring it home" : "Waiting for its person"}</span>${icon("arrow")}</div></div></a></article>`;
+  return `<article class="card"><a class="card-link" href="#/items/${esc(i._id)}" aria-label="View ${esc(i.name)}">${art(i)}<div class="card-body"><div class="category">${esc(i.category)}</div><h3>${esc(i.name)}</h3><div class="card-meta">${icon("pin")}${esc(i.location)}</div><div class="card-meta">${icon("calendar")}${fmt(i.date)}</div></div></a></article>`;
 }
 function navigation() {
   const hash = location.hash || "#/";
@@ -117,19 +117,31 @@ async function browse(home, params, token) {
   ]);
   if (token !== routeNumber) return;
   const hero = home
-    ? `<section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="dot"></span> A SMALL ACT. A BIG DIFFERENCE.</div><h1>Lost something?<br>Let's <em>find it together.</em></h1><p>Your campus. Your community. One place to reconnect with the things that matter.</p><div class="hero-actions"><a class="button lime" href="#/report?type=lost">${icon("search")} I've lost something</a><a class="button outline" href="#/report?type=found">${icon("plus")} I found something</a></div><a class="hero-browse" href="#/browse">Browse the noticeboard ${icon("arrow")}</a></div><img class="hero-art" src="/art.svg" alt="Illustrated campus belongings: backpack, phone, keys and ID card"></section><div class="stats-strip">${[
-        ["box", stats.open, "Open listings"],
-        ["search", stats.lost, "Looking for a home"],
-        ["check", stats.found, "Found & waiting"],
-        ["users", stats.recovered, "Happy reunions"],
-      ]
-        .map(
-          ([ic, n, t]) =>
-            `<div class="stat"><span class="stat-icon">${icon(ic)}</span><div><strong>${n}</strong><small>${t}</small></div></div>`,
-        )
-        .join(
-          "",
-        )}</div><div class="section-heading"><div><h2>Recent campus listings</h2><p>Filter by item type, category or location.</p></div><a class="text-link" href="#/browse">View all listings ${icon("arrow")}</a></div>`
+    ? `<section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Sai University</p>
+        <h1>Campus lost<br> <em>&amp; found.</em></h1>
+        <p>Search for missing belongings or help a campus member get theirs back.</p>
+        <a class="hero-browse" href="#/browse">Browse all reports ${icon("arrow")}</a>
+      </div>
+      <div class="hero-actions">
+        <h2>File a report</h2>
+        <a class="report-choice" href="#/report?type=lost">${icon("search")} I lost an item ${icon("arrow")}</a>
+        <a class="report-choice" href="#/report?type=found">${icon("plus")} I found an item ${icon("arrow")}</a>
+      </div>
+    </section><div class="stats-strip">${[
+      ["box", stats.open, "Open listings"],
+      ["search", stats.lost, "Lost reports"],
+      ["check", stats.found, "Found reports"],
+      ["users", stats.recovered, "Recovered items"],
+    ]
+      .map(
+        ([ic, n, t]) =>
+          `<div class="stat"><span class="stat-icon">${icon(ic)}</span><div><strong>${n}</strong><small>${t}</small></div></div>`,
+      )
+      .join(
+        "",
+      )}</div><div class="section-heading"><div><h2>Recent campus listings</h2><p>Filter by item type, category or location.</p></div><a class="text-link" href="#/browse">View all listings ${icon("arrow")}</a></div>`
     : head(
         "THE CAMPUS NOTICEBOARD",
         "Find what you’re looking for.",
@@ -157,7 +169,7 @@ async function browse(home, params, token) {
       )
       .join(
         "",
-      )}</div><span class="count-label">${data.total} ${data.total === 1 ? "item" : "items"} ${home ? "waiting to reconnect" : "in this search"}</span></div><section aria-label="Item listings" class="grid">${
+      )}</div><span class="count-label">${data.total} ${data.total === 1 ? "report" : "reports"}</span></div><section aria-label="Item listings" class="grid">${
       data.items.length
         ? data.items
             .slice(0, home ? 8 : 12)
@@ -167,7 +179,7 @@ async function browse(home, params, token) {
             "No items found",
             "Try a different keyword, category or campus building.",
           )
-    }</section>${home ? '<div class="center-action"><a class="button light" href="#/browse">Explore all listings ' + icon("arrow") + "</a></div>" : data.pages > 1 ? `<div class="pagination">${data.page > 1 ? `<button class="button light small" data-page="${data.page - 1}">Previous</button>` : ""}<span>Page ${data.page} of ${data.pages}</span>${data.page < data.pages ? `<button class="button light small" data-page="${data.page + 1}">Next</button>` : ""}</div>` : ""}${home ? `<aside class="help-band"><div><div class="eyebrow">KINDNESS COMES FULL CIRCLE</div><h3>Found something? Make someone’s day.</h3><p>A quick report could mean the world to someone looking for it.</p></div><a class="button" href="#/report?type=found">Report a found item ${icon("arrow")}</a></aside>` : ""}`,
+    }</section>${!home && data.pages > 1 ? `<div class="pagination">${data.page > 1 ? `<button class="button light small" data-page="${data.page - 1}">Previous</button>` : ""}<span>Page ${data.page} of ${data.pages}</span>${data.page < data.pages ? `<button class="button light small" data-page="${data.page + 1}">Next</button>` : ""}</div>` : ""}`,
   );
   bindFilters(params);
 }
@@ -203,7 +215,7 @@ function authPage(register, params, administrator = false) {
     return;
   }
   shell(
-    `<div class="auth-layout"><section class="auth-intro"><div><div class="eyebrow">WELCOME TO YOUR CAMPUS COMMUNITY</div><h2>Good things<br>find their way<br>back.</h2><p>A little help from your campus can make all the difference.</p></div><img src="/art.svg" alt="An illustration of lost campus belongings"></section><section class="auth-form"><nav class="signin-tabs" aria-label="Sign-in options"><a href="#/login" ${!administrator ? 'aria-current="page"' : ""}>Student sign-in</a><a href="#/admin-login" ${administrator ? 'aria-current="page"' : ""}>Admin portal</a></nav><h2>${administrator ? "Administrator sign-in" : register ? "Create your account" : "Welcome back."}</h2><p class="form-subtitle">${administrator ? "Sign in to review complaints, listings and recovery requests." : register ? "Register to report items and track requests." : "Sign in to report items and track requests."}</p><form id="auth-form">${register ? '<div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" maxlength="80" required></div>' : ""}<div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="${register ? "new-password" : "current-password"}" ${register ? 'minlength="10"' : ""} maxlength="72" required>${register ? "<small>Use at least 10 characters. Maximum 72 UTF-8 bytes.</small>" : ""}</div><button class="button" type="submit">${register ? "Create account" : "Sign in"} ${icon("arrow")}</button></form><p class="auth-switch" ${administrator ? "hidden" : ""}>${register ? "Already part of the community?" : "New around here?"} <a href="#/${register ? "login" : "register"}?next=${encodeURIComponent(params.get("next") || "/dashboard")}">${register ? "Sign in" : "Create an account"}</a></p></section></div>`,
+    `<div class="auth-layout"><section class="auth-intro"><div><p class="eyebrow">Sai University</p><h2>Campus lost<br>&amp; found.</h2></div></section><section class="auth-form"><nav class="signin-tabs" aria-label="Sign-in options"><a href="#/login" ${!administrator ? 'aria-current="page"' : ""}>Student sign-in</a><a href="#/admin-login" ${administrator ? 'aria-current="page"' : ""}>Admin portal</a></nav><h2>${administrator ? "Administrator sign-in" : register ? "Create your account" : "Welcome back."}</h2><p class="form-subtitle">${administrator ? "Sign in to review complaints, listings and recovery requests." : register ? "Register to report items and track requests." : "Sign in to report items and track requests."}</p><form id="auth-form">${register ? '<div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" maxlength="80" required></div>' : ""}<div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div><div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="${register ? "new-password" : "current-password"}" ${register ? 'minlength="10"' : ""} maxlength="72" required>${register ? "<small>Use at least 10 characters. Maximum 72 UTF-8 bytes.</small>" : ""}</div><button class="button" type="submit">${register ? "Create account" : "Sign in"} ${icon("arrow")}</button></form><p class="auth-switch" ${administrator ? "hidden" : ""}>${register ? "Already part of the community?" : "New around here?"} <a href="#/${register ? "login" : "register"}?next=${encodeURIComponent(params.get("next") || "/dashboard")}">${register ? "Sign in" : "Create an account"}</a></p></section></div>`,
   );
   const password = $("#password");
   const reveal = document.createElement("button");
@@ -251,7 +263,7 @@ async function reportPage(params, token, editId) {
   if (item && item.owner._id !== state.user.id && state.user.role !== "admin")
     throw new Error("You cannot edit this listing.");
   shell(
-    `${head(editId ? "UPDATE YOUR REPORT" : "LET’S MAKE A CONNECTION", editId ? "Edit your listing." : "Every reunion starts here.", editId ? "Keep the details clear and current." : "Share a few details. Your campus will take it from here.")}<div class="narrow panel"><form id="report-form"><div class="form-grid"><div class="field full"><label for="type">I’m reporting something…</label><select name="type" id="type"><option value="lost" ${(item?.type || params.get("type")) === "lost" ? "selected" : ""}>Lost — help me find my item</option><option value="found" ${(item?.type || params.get("type")) === "found" ? "selected" : ""}>Found — help me return an item</option></select></div><div class="field full"><label for="name">Item name</label><input id="name" name="name" maxlength="100" required placeholder="e.g. Blue canvas backpack" value="${esc(item?.name || "")}"></div><div class="field"><label for="category">Category</label><select name="category" id="category" required><option value="">Choose a category</option>${state.meta.categories.map((v) => `<option ${item?.category === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div><div class="field"><label for="location">Campus location</label><select name="location" id="location" required><option value="">Choose a building or area</option>${state.meta.locations.map((v) => `<option ${item?.location === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div><div class="field"><label for="date">Date lost or found</label><input name="date" id="date" type="date" max="${new Date().toISOString().slice(0, 10)}" value="${item ? new Date(item.date).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}" required></div><div class="field"><label for="image">Photo (optional)</label><input name="image" id="image" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPEG or WebP. Maximum 3 MB.</small></div><div class="field full"><label for="description">Description</label><textarea name="description" id="description" minlength="10" maxlength="1500" required placeholder="Colour, brand, where you last saw it… Keep unique identifying details private so you can verify ownership.">${esc(item?.description || "")}</textarea><small>Do not publish ID numbers, phone numbers, passwords or other sensitive details.</small></div>${item?.hasImage ? '<div class="field full"><label><input type="checkbox" name="removeImage" value="true"> Remove existing image</label></div>' : ""}</div><div class="notice">${icon("shield")} Only you and administrators can manage your report. Claim evidence is visible only to the people involved and administrators.</div><div class="form-actions"><a class="button light" href="${editId ? "#/items/" + editId : "#/browse"}">Cancel</a><button class="button" type="submit">${editId ? "Save changes" : "Publish report"} ${icon("arrow")}</button></div></form></div>`,
+    `${head(editId ? "UPDATE YOUR REPORT" : "LET’S MAKE A CONNECTION", editId ? "Edit your listing." : "Report an item", editId ? "Keep the details clear and current." : "Share a few details. Your campus will take it from here.")}<div class="narrow panel"><form id="report-form"><div class="form-grid"><div class="field full"><label for="type">I’m reporting something…</label><select name="type" id="type"><option value="lost" ${(item?.type || params.get("type")) === "lost" ? "selected" : ""}>Lost — help me find my item</option><option value="found" ${(item?.type || params.get("type")) === "found" ? "selected" : ""}>Found — help me return an item</option></select></div><div class="field full"><label for="name">Item name</label><input id="name" name="name" maxlength="100" required placeholder="e.g. Blue canvas backpack" value="${esc(item?.name || "")}"></div><div class="field"><label for="category">Category</label><select name="category" id="category" required><option value="">Choose a category</option>${state.meta.categories.map((v) => `<option ${item?.category === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div><div class="field"><label for="location">Campus location</label><select name="location" id="location" required><option value="">Choose a building or area</option>${state.meta.locations.map((v) => `<option ${item?.location === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div><div class="field"><label for="date">Date lost or found</label><input name="date" id="date" type="date" max="${new Date().toISOString().slice(0, 10)}" value="${item ? new Date(item.date).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10)}" required></div><div class="field"><label for="image">Photo (optional)</label><input name="image" id="image" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPEG or WebP. Maximum 3 MB.</small></div><div class="field full"><label for="description">Description</label><textarea name="description" id="description" minlength="10" maxlength="1500" required placeholder="Colour, brand, where you last saw it… Keep unique identifying details private so you can verify ownership.">${esc(item?.description || "")}</textarea><small>Do not publish ID numbers, phone numbers, passwords or other sensitive details.</small></div>${item?.hasImage ? '<div class="field full"><label><input type="checkbox" name="removeImage" value="true"> Remove existing image</label></div>' : ""}</div><div class="notice">${icon("shield")} Only you and administrators can manage your report. Claim evidence is visible only to the people involved and administrators.</div><div class="form-actions"><a class="button light" href="${editId ? "#/items/" + editId : "#/browse"}">Cancel</a><button class="button" type="submit">${editId ? "Save changes" : "Publish report"} ${icon("arrow")}</button></div></form></div>`,
   );
   $("#image").addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -432,7 +444,7 @@ async function adminPage(params, token) {
   if (token !== routeNumber) return;
   const max = Math.max(1, ...extra.byCategory.map((x) => x.count));
   shell(
-    `${head("CAMPUS OPERATIONS", "A clearer view of campus.", "Review requests, manage listings and keep every recovery moving.")}<div class="dashboard-stats">${[
+    `${head("CAMPUS OPERATIONS", "Admin dashboard", "Review requests, manage listings and keep every recovery moving.")}<div class="dashboard-stats">${[
       [stats.total, "Total listings"],
       [extra.users, "Registered members"],
       [extra.pending, "Pending requests"],
