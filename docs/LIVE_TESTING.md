@@ -19,6 +19,8 @@ The initial health request timed out after 90 seconds before any mutation. Redep
 
 ## Evidence
 
+[Postman API testing evidence PDF](CampusFind_Postman_API_Testing_Evidence.pdf) presents all 26 requests and 29 assertions as images rendered from the original live Newman console output.
+
 - CampusFind_Live_Testing_Evidence.pdf: readable tables and browser screenshots.
 - live-testing/live-results.json: per-check outcomes.
 - live-testing/postman-live-results.json: sanitized HTTP statuses and assertions.

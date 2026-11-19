@@ -3,7 +3,7 @@
 Student: **Poorna Chandra Manupati** · PRN **250200322** · Semester **3**  
 Course lecturer: **Rupam Sah** · Submission: **30 November 2026**
 
-[Project report (PDF)](docs/CampusFind_Project_Report.pdf) · [Editable report (Word)](docs/CampusFind_Project_Report.docx) · [Live testing evidence](docs/LIVE_TESTING.md)
+[Project report (PDF)](docs/CampusFind_Project_Report.pdf) · [Editable report (Word)](docs/CampusFind_Project_Report.docx) · [Live testing evidence](docs/LIVE_TESTING.md) · [Postman API evidence PDF](docs/CampusFind_Postman_API_Testing_Evidence.pdf)
 
 Project repository: https://github.com/poornachandra3217-glitch/Web_Tech_Final_Project
 
