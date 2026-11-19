@@ -9,6 +9,7 @@ All endpoints are same-origin. Responses are JSON except item images. Errors use
 | GET    | /api/auth/me           | Current user or null and CSRF token                 |
 | POST   | /api/auth/register     | name, email, password; creates student              |
 | POST   | /api/auth/login        | email, password; starts session                     |
+| POST   | /api/auth/admin-login | Admin credentials only; starts admin session       |
 | POST   | /api/auth/logout       | Authenticated; destroys session                     |
 | GET    | /api/stats             | Public listing counts                               |
 | GET    | /api/items             | Search and paginated listing retrieval              |
@@ -22,6 +23,10 @@ All endpoints are same-origin. Responses are JSON except item images. Errors use
 | GET    | /api/claims            | Claimant/reporter scope; admin sees all; latest 200 |
 | PATCH  | /api/claims/:id        | Reporter/admin reviews pending claim                |
 | GET    | /api/admin/stats       | Admin only; members, pending and categories         |
+| POST   | /api/complaints        | Signed-in user submits a private complaint           |
+| GET    | /api/complaints        | Signed-in user lists their own complaints            |
+| GET    | /api/admin/complaints  | Admin lists complaints, optionally by status         |
+| PATCH  | /api/admin/complaints/:id | Admin records a decision and response              |
 
 ## Listing fields
 
@@ -36,6 +41,10 @@ An edit with `name` must include all listing fields. Once claims exist, full rew
 Submit `{ "evidence": "At least 15 characters of identifying evidence" }`. One request per item per claimant. Self-claims, closed/recovered listings and duplicate requests are rejected. A person who finds an item can also respond to a lost listing using the same recovery-request flow.
 
 Review with `{ "status": "approved" | "rejected", "reviewNote": "Optional up to 500 characters" }`. Only a listing's reporter or admin can review it. Reviewed claims are final. Approval is transactional: an open item becomes recovered, selected claim approved, other pending claims rejected. Write conflicts are retried by the MongoDB driver; an already recovered item cannot be approved twice.
+
+## Complaints
+
+Submit a `subject` of up to 100 characters and a `description` of 15–1500 characters. Lists return `complaints`, `page` and `pages` with 20 complaints per page. Administrators can filter by `status` and update a complaint using `status` and `response`. Valid statuses are `open`, `in_review` and `resolved`. Resolving a complaint requires a response of up to 500 characters, visible to its reporter.
 
 ## Status codes
 

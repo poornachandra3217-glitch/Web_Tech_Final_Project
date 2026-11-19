@@ -4,9 +4,9 @@ Deadline: 30 November 2026. Submit through Google Classroom.
 
 | Deliverable        | Prepared content                                                                 | Remaining verification                                                     |
 | ------------------ | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| Source repository  | Complete application, lockfile, README, tests and CI workflow                    | Published to the student GitHub repository                           |
-| Live application   | Express startup, Render Blueprint and Atlas instructions                         | Live API workflows verified; authenticated screenshots and physical mobile checks remain            |
-| Report             | Editable report, architecture, database, implementation, tests and AI disclosure | University-format report prepared separately; fill student details/signatures; add dashboard screenshots |
+| Source repository  | Complete application, lockfile, README, tests and CI workflow                    | Published on GitHub with the redesigned frontend                           |
+| Live application   | Express startup, Render Blueprint and Atlas instructions                         | Redesign and public endpoints verified on Render. Capture current UI and authenticated dashboard screenshots and check the layout on a physical phone.            |
+| Report             | Editable report, architecture, database, implementation, tests and AI disclosure | PDF and Word report include Appendix D for the redesign. Complete required signatures and add current screenshots. |
 | API evidence       | Postman collection, environment, automated run results                           | Live Newman evidence complete; desktop Runner screenshots only if instructor requires        |
 | Demonstration      | Viva questions and step-by-step flow                                             | Understand code and perform the demonstration yourself                     |
 | Additional feature | Possible-match suggestions; also sorting/building filters                        | Obtain instructor assignment or approval                                   |

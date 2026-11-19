@@ -1,6 +1,12 @@
 # CampusFind live testing evidence
 
-Verified 8 November 2026.
+## Noticeboard redesign
+
+The redesign was merged in [pull request #1](https://github.com/poornachandra3217-glitch/Web_Tech_Final_Project/pull/1). Its [GitHub Actions run](https://github.com/poornachandra3217-glitch/Web_Tech_Final_Project/actions/runs/44319752417) passed the repository syntax and automated integration checks. On 18 November 2026, the Render deployment served the redesigned app bundle and stylesheet, and the health and public listing endpoints returned HTTP 200. The report explains the current UI in Appendix D.
+
+## Earlier live verification
+
+Verified 8 November 2026. The screenshots and result counts in this section describe that earlier build.
 
 - Live API workflow: 36 checks passed, zero failed.
 - Separate administrator/student smoke: 12 checks passed.

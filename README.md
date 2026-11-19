@@ -9,7 +9,7 @@ Project repository: https://github.com/poornachandra3217-glitch/Web_Tech_Final_P
 
 Live application: https://campusfind-sai.onrender.com
 
-Deployment: Render free web service in Singapore, backed by the existing Atlas Cluster0 and the isolated campusfind database. Health, sample retrieval, persistence across redeployment and public browser workflows are verified. See docs/live-verification.json and docs/screenshots/.
+The live Render service uses MongoDB Atlas for persistence. The current release uses a cream and navy campus noticeboard with an orange report panel, horizontal listing cards, and matching sign-in, forms and dashboards. See the [release and testing evidence](docs/LIVE_TESTING.md).
 
 A full-stack Campus Lost and Found Portal for the Sai University Web Technology and Internet Programming individual project, academic year 2026–2027. Built with semantic HTML, CSS, JavaScript ES modules, Express and MongoDB.
 
@@ -44,6 +44,7 @@ For a local database, run `docker compose up -d` first. The supplied Compose con
 - Atomic approval: one approved claim, item becomes recovered, competing pending claims rejected together.
 - Student dashboard with personal listings, outgoing requests and incoming requests.
 - Admin dashboard with listing management, all requests, statistics and category counts.
+- A private complaints area lets reporters track their own complaints and administrators review them and respond.
 - Additional feature: explainable possible-match suggestions using category, opposite report type, location, name keywords and date proximity. Instructor approval is still required for this proposed additional feature. Date sorting and building filters are also available.
 - Responsive layouts, keyboard-accessible forms, reduced-motion support and local illustrations without third-party image requests.
 
@@ -70,7 +71,7 @@ Import both JSON files in `postman/` into Postman, select the local environment,
 | Path               | Responsibility                                                             |
 | ------------------ | -------------------------------------------------------------------------- |
 | `src/app.js`       | Express API, validation, authorization, upload checks and session security |
-| `src/models.js`    | User, Item and Claim schemas and indexes                                   |
+| `src/models.js`    | User, Item, Claim and Complaint schemas and indexes                                   |
 | `src/server.js`    | Persistent database connection and process startup                         |
 | `src/seed.js`      | Non-destructive sample data and administrator creation                     |
 | `public/`          | Responsive HTML/CSS and JavaScript modules                                 |
@@ -88,7 +89,7 @@ Reports with claims cannot be deleted or rewritten; close them instead. Recovere
 
 ## Deployment and submission
 
-See `docs/DEPLOYMENT.md`, `docs/API.md`, `docs/VIVA.md` and `docs/SUBMISSION.md`. The application is published to the repository and live URL above. Live testing passed on 8 November 2026: 36 workflow checks, 12 separate administrator/student checks, and 26 Postman requests with 29 assertions. See `docs/LIVE_TESTING.md` and the evidence PDF under `docs/live-testing/`. The report has been prepared using the supplied Sai University format; personal details and signatures remain to be completed. Authenticated dashboard screenshots and physical mobile-layout checks remain separate visual verification tasks.
+See `docs/DEPLOYMENT.md`, `docs/API.md`, `docs/VIVA.md` and `docs/SUBMISSION.md`. The application is published to the repository and live URL above. Live testing passed on 8 November 2026: 36 workflow checks, 12 separate administrator/student checks, and 26 Postman requests with 29 assertions. See `docs/LIVE_TESTING.md` and the evidence PDF under `docs/live-testing/`. The Sai University report includes a release appendix for the current UI. The submission checklist tracks signatures, current screenshots and physical mobile verification.
 
 ## AI assistance
 

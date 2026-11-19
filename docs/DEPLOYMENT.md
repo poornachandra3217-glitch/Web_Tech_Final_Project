@@ -1,5 +1,7 @@
 # Deploy with GitHub Render and MongoDB Atlas
 
+The current service is deployed at https://campusfind-sai.onrender.com. The steps below apply when creating another environment. For release checks on the existing service, see [Live testing evidence](LIVE_TESTING.md).
+
 ## 1 Prepare GitHub
 
 Create a private or public empty repository named campusfind in your own GitHub account. From the project root run:
@@ -41,7 +43,7 @@ Set ADMIN_EMAIL, ADMIN_PASSWORD and DEMO_PASSWORD temporarily for the seed opera
 
 Record the exact deployed HTTPS URL. Check health, registration, login, image upload, filtering, user dashboard, two-account claim approval, admin access and logout. Restart/redeploy the service, then verify that listings, images and account/session records remain in Atlas. Run the collection against an isolated staging database or use intentional manual test records. Do not claim deployment is complete until these checks pass.
 
-Take screenshots for the report and Postman Runner. Update report, README, and Classroom submission with actual URLs. The account connection, cloud provisioning and final deployed smoke test remain external setup steps until account access is available.
+Take screenshots for the report and Postman Runner. Update report, README, and Classroom submission with actual URLs.
 
 ## Troubleshooting
 

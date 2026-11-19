@@ -2,14 +2,14 @@
 
 ## Demonstration sequence
 
-1. Open the home page. Explain that listings and statistics come from the Express API and MongoDB.
+1. Open the redesigned noticeboard. Show the report panel, the four status counts and the horizontal listing cards. Explain that the Express API reads listings and counts from MongoDB.
 2. Search for an item, filter by building/category/type and switch date sorting.
 3. Register a student and publish a report, optionally with an image.
 4. Open the listing and explain the possible-match score. Suggestions do not verify ownership.
 5. Sign in as another student and submit private identifying evidence.
 6. Sign back in as the reporter, review the incoming request and approve it.
 7. Show recovered item status and the request decision in the claimant dashboard.
-8. Open the admin account to demonstrate statistics and management controls.
+8. Open the admin account to demonstrate statistics and management controls. In a test environment, show a student submitting a complaint, the administrator responding, and the student seeing the response.
 9. Show an unauthorized API attempt returning 403, then explain ownership checks.
 10. Show the actual Postman run, integration results and persistent cloud deployment if configured.
 
